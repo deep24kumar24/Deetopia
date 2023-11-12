@@ -11,7 +11,18 @@ const PromptCard = ({
 	handleEdit,
 	handleDelete,
 }) => {
-	const [copy, setCopy] = useState("");
+	const { data: session } = useSession();
+	const pathName = usePathname();
+	const router = useRouter();
+
+	const [copied, setCopied] = useState("");
+
+	const handleCopy = () => {
+		setCopied(post.prompt);
+		navigator.clipboard.writeText(post.prompt);
+
+		setTimeout(() => setCopied(""), 3000);
+	};
 
 	return (
 		<div className="prompt_card">
@@ -36,12 +47,12 @@ const PromptCard = ({
 
 				<div
 					className="copy_btn"
-					onClick={() => {}}>
+					onClick={handleCopy}>
 					<Image
 						height={12}
 						width={12}
 						src={
-							copy === post.prompt
+							copied === post.prompt
 								? "/assets/icons/tick.svg"
 								: "/assets/icons/copy.svg"
 						}
@@ -57,8 +68,24 @@ const PromptCard = ({
 				onClick={() =>
 					handleTagClick && handleTagClick(post.tag)
 				}>
-				{post.tag}
+				#{post.tag}
 			</p>
+
+			{session?.user.id === post.creator._id &&
+				pathName === "/profile" && (
+					<div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
+						<p
+							onClick={handleEdit}
+							className="font-inter text-sm green_gradient cursor-pointer">
+							Edit
+						</p>
+						<p
+							onClick={handleDelete}
+							className="font-inter text-sm orange_gradient cursor-pointer">
+							Delete
+						</p>
+					</div>
+				)}
 		</div>
 	);
 };
