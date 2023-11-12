@@ -49,6 +49,7 @@ const PromptCard = ({
 					className="copy_btn"
 					onClick={handleCopy}>
 					<Image
+						alt="Copy"
 						height={12}
 						width={12}
 						src={
